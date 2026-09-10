@@ -182,6 +182,34 @@ Each ingest runs inside one transaction: the document row, the primary component
 
 Thousands of SBOMs at a few thousand components each is millions of `components` rows, a comparable number of `dependencies` rows, and a `packages` table that grows much more slowly because the same package-versions recur across documents. The design already leans toward that shape; the deployment does not.
 
+### Measured against a generated corpus
+
+`scripts/gencorpus` generates that shape so the claims below are not guesses. Its defaults produce 2,500 applications averaging 800 components: 2,846 files (346 of them revisions), 2,274,954 component occurrences, 2,835,379 dependency edges, and 42,500 distinct package-versions, in 745 MB of JSON. Writing it takes 1.4 seconds on a 12-core M-series laptop. See the README for the flags and the shape of the generated documents.
+
+Ingest is three orders of magnitude slower than query, and it is the only thing that needs work:
+
+| | Measured |
+|---|---|
+| Generate the corpus | 1.4 s for 2.27M components (parallel, 12 workers) |
+| Ingest, complete run | 226 files / 175,675 components in 2 m 28 s, i.e. **~1,190 components/s** |
+| Ingest, large corpus | 1.33 documents/s sustained ~320 documents in, i.e. ~1,070 components/s; the full 2.27M corpus extrapolates to **~35 minutes** |
+| Database size | ~0.5 KB per component row, so ~1.2 GB for the full corpus |
+| `--component` on a package in 358 documents, with the transitive dependents walk | **0.25 s** |
+| `--component` on a mid-frequency package (109 documents) | 0.33 s |
+| `--license GPL-3.0-only`, 6,292 hits | 0.08 s |
+| `--license MIT`, 133,993 hits, 34 MB of JSON | 0.46 s |
+
+Query numbers are against a partially loaded database (~320 documents, ~275k components) because the full ingest was stopped early; they are the right order of magnitude but the full corpus was not queried. The ingest number is what matters and it was measured twice, on a complete small run and part-way into the large one, with only mild degradation as the tables grew.
+
+The read path is already in good shape: the recursive dependents walk over a package present in every document, which was the thing this section predicted would hurt, costs a quarter of a second at this size. Ingest is the bottleneck, and for the reason the design predicted:
+
+- Every component is one `INSERT ... RETURNING id`, every license join row and every dependency edge one more `INSERT`. That is roughly 7 million single-row statements for the full corpus, each a CGO round trip into an engine whose worst case is row-at-a-time appends. Bulk loading per document, via go-duckdb's appender or a multi-row `VALUES` list, is the single biggest win available and needs ids assigned in Go rather than by `RETURNING`.
+- The `packages` and `licenses` id caches live on the per-document `ingester`, so each document re-runs a point lookup for every package it holds even though the corpus only has 42,500 of them and the log shows `new packages: 0` for most documents. Hoisting those caches onto `DuckStore` turns ~2.3M lookups into ~42,500 with no schema change.
+- Prepared statements are rebuilt per document (2,846 × 3) rather than once per store.
+- Parsing 745 MB of JSON and writing to a single-writer database both happen on one goroutine. Parsing is embarrassingly parallel, so a parse-ahead pipeline feeding one writer overlaps the two.
+
+None of that changes the schema or the query semantics, which is why it is worth doing before the deployment changes below.
+
 ### What already scales
 
 - Canonical `packages` keeps `components` narrow. A component row is five small columns (two FKs, a nullable parent, a short `bom_ref`, a boolean). Name, version, purl, and type are stored once per package-version, not once per occurrence. Across thousands of SBOMs of related applications, `packages` converges while `components` grows linearly, which is the right shape.
@@ -206,6 +234,8 @@ The transitive-dependents walk needs a different strategy over millions of edges
 - Keep the recursive query but bound depth and paginate by document, so one query touches one document's edge set at a time.
 
 The first also restores hop depth to the output, which the flat `Dependents` list currently loses.
+
+Output needs a bound. `--license MIT` already returns 133,993 rows and 34 MB of JSON against a fifth of the generated corpus, and every hit is materialized into a slice before anything is printed. A `--limit`, a `--count`, or streaming output is needed before the collection gets much larger.
 
 Name and purl lookups need real indexes. `--component` compares `lower(packages.name)`, which the plain `packages(name)` index cannot serve. Either add a normalized `name_lower` column and index that, or use an expression index (`CREATE INDEX ON packages (lower(name))` in Postgres). The deferred `--purl` flag wants an index on `purl` or on `package_key`, which already has one via UNIQUE. Prefix or fuzzy name search, if wanted, is a trigram index.
 

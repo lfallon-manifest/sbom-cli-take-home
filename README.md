@@ -113,7 +113,37 @@ The lodash rows show three things at once: the same package-version reached from
 
 `--json` emits the hits as an array using the field names in `internal/store/types.go`; an empty result is `[]`. With `ingest`, `--json` emits one array of per-file summaries.
 
+## Scale testing
+
+`examples/` is ten hand-written documents, each chosen for an edge case. Scale is a different question, so `scripts/gencorpus` generates a synthetic corpus for it: thousands of applications drawing their components from a shared universe of package-versions, so the same packages recur across documents the way a real fleet's dependencies do.
+
+The corpus is not committed, only the script that produces it. `examples-large/` is gitignored.
+
+```sh
+go run ./scripts/gencorpus --out examples-large
+./sbom-cli --db ./large.duckdb ingest examples-large/*.cdx.json
+```
+
+| Flag | Default | Meaning |
+|------|---------|---------|
+| `--out <dir>` | `examples-large` | Output directory. Refuses to write into a non-empty one without `--force`. |
+| `--documents <n>` | `2500` | Applications to generate. |
+| `--components <n>` | `800` | Mean components per document, before jitter. |
+| `--universe <n>` | derived | Distinct package-versions to draw from. The default gives each package-version about 50 occurrences across the corpus. |
+| `--seed <n>` | `1` | The same seed regenerates byte-identical files. |
+| `--jitter <f>` | `0.35` | Fraction to vary each document's component count by. |
+| `--revision-rate <f>` | `0.15` | Share of applications that also emit a version-2 revision under the same serial number. |
+| `--no-serial-rate <f>` | `0.05` | Share of documents with no `serialNumber`, so they key on content hash. |
+| `--cycle-rate <f>` | `0.05` | Share of documents containing a dependency cycle. |
+| `--dangling-rate <f>` | `0.03` | Share of documents containing a dangling dependency ref. |
+| `--workers <n>` | one per CPU | Parallel document writers. |
+| `--force`, `--quiet` | off | Overwrite a non-empty output directory; suppress progress. |
+
+What the generated documents look like: each is a DAG rooted at the application, with about 6% of components as direct dependencies and the rest hanging off other components, a quarter of them with a second parent, so the transitive dependents walk has real work to do. Component draws are 70% Zipf and 30% uniform, which produces both package-versions present in nearly every document and a long tail drawn once or twice. Licenses follow a weighted distribution over SPDX ids, expressions with `OR` and `WITH`, name-only licenses, and no declaration at all. Names are synthetic (`quiet-lattice-4`, `github.com/fernbank/compact-cursor-2`) across npm, golang, maven, pypi, cargo, and deb, and 2% of package-versions carry no purl.
+
+Output is deterministic, which is what makes it a benchmark: the same seed regenerates the same bytes, so a run can be repeated and re-ingesting a corpus is a no-op. Each corpus also gets a `corpus-manifest.json` recording the exact configuration, the resulting counts, and both ends of the reuse distribution, which is where to get hot and cold package names to query.
+
 ## More
 
-- `DESIGN.md` covers the schema, query semantics, the DuckDB choice, scaling, and what was cut for time.
+- `DESIGN.md` covers the schema, query semantics, the DuckDB choice, scaling, and what was cut for time. Its scaling section carries the numbers measured against a generated corpus.
 - `examples/README.md` describes each fixture SBOM and the edge case it exercises.
