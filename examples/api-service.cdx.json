@@ -1,0 +1,165 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "serialNumber": "urn:uuid:7c5b4a9e-2f1d-4e8a-9b3c-6d2e1f0a8b7c",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-08-03T14:22:11Z",
+    "tools": {
+      "components": [
+        { "type": "application", "name": "hand-crafted", "version": "1.0.0" }
+      ]
+    },
+    "component": {
+      "type": "application",
+      "bom-ref": "pkg:golang/github.com/acme/api-service@v2.3.0",
+      "name": "github.com/acme/api-service",
+      "version": "v2.3.0",
+      "purl": "pkg:golang/github.com/acme/api-service@v2.3.0"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "bom-ref": "pkg:golang/github.com/gin-gonic/gin@v1.9.1",
+      "name": "github.com/gin-gonic/gin",
+      "version": "v1.9.1",
+      "purl": "pkg:golang/github.com/gin-gonic/gin@v1.9.1",
+      "licenses": [ { "license": { "id": "MIT" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:golang/github.com/gin-contrib/sse@v0.1.0",
+      "name": "github.com/gin-contrib/sse",
+      "version": "v0.1.0",
+      "purl": "pkg:golang/github.com/gin-contrib/sse@v0.1.0",
+      "licenses": [ { "license": { "id": "MIT" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:golang/github.com/go-playground/validator/v10@v10.14.0",
+      "name": "github.com/go-playground/validator/v10",
+      "version": "v10.14.0",
+      "purl": "pkg:golang/github.com/go-playground/validator/v10@v10.14.0",
+      "licenses": [ { "license": { "id": "MIT" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:golang/github.com/leodido/go-urn@v1.2.4",
+      "name": "github.com/leodido/go-urn",
+      "version": "v1.2.4",
+      "purl": "pkg:golang/github.com/leodido/go-urn@v1.2.4"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:golang/golang.org/x/crypto@v0.21.0",
+      "name": "golang.org/x/crypto",
+      "version": "v0.21.0",
+      "purl": "pkg:golang/golang.org/x/crypto@v0.21.0",
+      "licenses": [ { "license": { "id": "BSD-3-Clause" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:golang/golang.org/x/sys@v0.18.0",
+      "name": "golang.org/x/sys",
+      "version": "v0.18.0",
+      "purl": "pkg:golang/golang.org/x/sys@v0.18.0",
+      "licenses": [ { "license": { "id": "BSD-3-Clause" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:golang/github.com/jackc/pgx/v5@v5.5.5",
+      "name": "github.com/jackc/pgx/v5",
+      "version": "v5.5.5",
+      "purl": "pkg:golang/github.com/jackc/pgx/v5@v5.5.5",
+      "licenses": [ { "license": { "id": "MIT" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:golang/github.com/jackc/pgpassfile@v1.0.0",
+      "name": "github.com/jackc/pgpassfile",
+      "version": "v1.0.0",
+      "purl": "pkg:golang/github.com/jackc/pgpassfile@v1.0.0",
+      "licenses": [ { "license": { "id": "MIT" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:golang/github.com/jackc/puddle/v2@v2.2.1",
+      "name": "github.com/jackc/puddle/v2",
+      "version": "v2.2.1",
+      "purl": "pkg:golang/github.com/jackc/puddle/v2@v2.2.1",
+      "licenses": [ { "license": { "id": "MIT" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "acme:internal-auth-sdk:2.3.0",
+      "group": "acme",
+      "name": "internal-auth-sdk",
+      "version": "2.3.0",
+      "description": "Internal authentication SDK, distributed as a vendored module with no public package URL",
+      "licenses": [ { "license": { "name": "Custom Proprietary License" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:generic/openssl@3.0.13",
+      "name": "openssl",
+      "version": "3.0.13",
+      "purl": "pkg:generic/openssl@3.0.13",
+      "licenses": [ { "license": { "id": "Apache-2.0" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/lodash@4.17.21?arch=x64#lib/index.js",
+      "name": "lodash",
+      "version": "4.17.21",
+      "description": "Bundled into the embedded admin UI assets",
+      "purl": "pkg:npm/lodash@4.17.21?arch=x64#lib/index.js",
+      "licenses": [ { "license": { "id": "MIT" } } ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "pkg:golang/github.com/acme/api-service@v2.3.0",
+      "dependsOn": [
+        "pkg:golang/github.com/gin-gonic/gin@v1.9.1",
+        "pkg:golang/github.com/jackc/pgx/v5@v5.5.5",
+        "acme:internal-auth-sdk:2.3.0",
+        "pkg:npm/lodash@4.17.21?arch=x64#lib/index.js"
+      ]
+    },
+    {
+      "ref": "pkg:golang/github.com/gin-gonic/gin@v1.9.1",
+      "dependsOn": [
+        "pkg:golang/github.com/gin-contrib/sse@v0.1.0",
+        "pkg:golang/github.com/go-playground/validator/v10@v10.14.0"
+      ]
+    },
+    { "ref": "pkg:golang/github.com/gin-contrib/sse@v0.1.0", "dependsOn": [] },
+    {
+      "ref": "pkg:golang/github.com/go-playground/validator/v10@v10.14.0",
+      "dependsOn": [ "pkg:golang/github.com/leodido/go-urn@v1.2.4" ]
+    },
+    { "ref": "pkg:golang/github.com/leodido/go-urn@v1.2.4", "dependsOn": [] },
+    {
+      "ref": "pkg:golang/github.com/jackc/pgx/v5@v5.5.5",
+      "dependsOn": [
+        "pkg:golang/github.com/jackc/pgpassfile@v1.0.0",
+        "pkg:golang/github.com/jackc/puddle/v2@v2.2.1",
+        "pkg:golang/golang.org/x/crypto@v0.21.0"
+      ]
+    },
+    { "ref": "pkg:golang/github.com/jackc/pgpassfile@v1.0.0", "dependsOn": [] },
+    { "ref": "pkg:golang/github.com/jackc/puddle/v2@v2.2.1", "dependsOn": [] },
+    {
+      "ref": "pkg:golang/golang.org/x/crypto@v0.21.0",
+      "dependsOn": [ "pkg:golang/golang.org/x/sys@v0.18.0" ]
+    },
+    { "ref": "pkg:golang/golang.org/x/sys@v0.18.0", "dependsOn": [] },
+    {
+      "ref": "acme:internal-auth-sdk:2.3.0",
+      "dependsOn": [ "pkg:golang/golang.org/x/crypto@v0.21.0", "pkg:generic/openssl@3.0.13" ]
+    },
+    { "ref": "pkg:generic/openssl@3.0.13", "dependsOn": [] },
+    { "ref": "pkg:npm/lodash@4.17.21?arch=x64#lib/index.js", "dependsOn": [] }
+  ]
+}

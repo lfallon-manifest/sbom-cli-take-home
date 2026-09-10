@@ -1,0 +1,165 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "serialNumber": "urn:uuid:c0ffee00-1234-4abc-9def-0123456789ab",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-08-13T12:00:00Z",
+    "tools": {
+      "components": [
+        { "type": "application", "name": "hand-crafted", "version": "1.0.0" }
+      ]
+    },
+    "component": {
+      "type": "application",
+      "bom-ref": "pkg:cargo/acme-edge-proxy@0.3.0",
+      "name": "acme-edge-proxy",
+      "version": "0.3.0",
+      "description": "Dependency graph deliberately contains the cycle hyper -> http -> bytes -> hyper",
+      "purl": "pkg:cargo/acme-edge-proxy@0.3.0"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/tokio@1.36.0",
+      "name": "tokio",
+      "version": "1.36.0",
+      "purl": "pkg:cargo/tokio@1.36.0",
+      "licenses": [ { "license": { "id": "MIT" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/mio@0.8.11",
+      "name": "mio",
+      "version": "0.8.11",
+      "purl": "pkg:cargo/mio@0.8.11",
+      "licenses": [ { "license": { "id": "MIT" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/pin-project-lite@0.2.13",
+      "name": "pin-project-lite",
+      "version": "0.2.13",
+      "purl": "pkg:cargo/pin-project-lite@0.2.13",
+      "licenses": [ { "expression": "Apache-2.0 OR MIT" } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/hyper@1.2.0",
+      "name": "hyper",
+      "version": "1.2.0",
+      "purl": "pkg:cargo/hyper@1.2.0",
+      "licenses": [ { "license": { "id": "MIT" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/http@1.1.0",
+      "name": "http",
+      "version": "1.1.0",
+      "purl": "pkg:cargo/http@1.1.0",
+      "licenses": [ { "expression": "MIT OR Apache-2.0" } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/bytes@1.5.0",
+      "name": "bytes",
+      "version": "1.5.0",
+      "purl": "pkg:cargo/bytes@1.5.0",
+      "licenses": [ { "license": { "id": "MIT" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/serde@1.0.197",
+      "name": "serde",
+      "version": "1.0.197",
+      "purl": "pkg:cargo/serde@1.0.197",
+      "licenses": [ { "expression": "MIT OR Apache-2.0" } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/serde_derive@1.0.197",
+      "name": "serde_derive",
+      "version": "1.0.197",
+      "purl": "pkg:cargo/serde_derive@1.0.197",
+      "licenses": [ { "expression": "MIT OR Apache-2.0" } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/syn@2.0.52",
+      "name": "syn",
+      "version": "2.0.52",
+      "purl": "pkg:cargo/syn@2.0.52",
+      "licenses": [ { "expression": "MIT OR Apache-2.0" } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/proc-macro2@1.0.79",
+      "name": "proc-macro2",
+      "version": "1.0.79",
+      "purl": "pkg:cargo/proc-macro2@1.0.79",
+      "licenses": [ { "expression": "MIT OR Apache-2.0" } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/unicode-ident@1.0.12",
+      "name": "unicode-ident",
+      "version": "1.0.12",
+      "purl": "pkg:cargo/unicode-ident@1.0.12",
+      "licenses": [ { "expression": "(MIT OR Apache-2.0) AND Unicode-DFS-2016" } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/rustls@0.22.2",
+      "name": "rustls",
+      "version": "0.22.2",
+      "purl": "pkg:cargo/rustls@0.22.2",
+      "licenses": [
+        { "license": { "id": "Apache-2.0" } },
+        { "license": { "id": "ISC" } },
+        { "license": { "id": "MIT" } }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/ring@0.17.8",
+      "name": "ring",
+      "version": "0.17.8",
+      "purl": "pkg:cargo/ring@0.17.8",
+      "licenses": [ { "expression": "(MIT OR Apache-2.0) AND BSD-3-Clause" } ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "pkg:cargo/acme-edge-proxy@0.3.0",
+      "dependsOn": [
+        "pkg:cargo/tokio@1.36.0",
+        "pkg:cargo/hyper@1.2.0",
+        "pkg:cargo/serde@1.0.197",
+        "pkg:cargo/rustls@0.22.2"
+      ]
+    },
+    {
+      "ref": "pkg:cargo/tokio@1.36.0",
+      "dependsOn": [ "pkg:cargo/mio@0.8.11", "pkg:cargo/pin-project-lite@0.2.13" ]
+    },
+    { "ref": "pkg:cargo/mio@0.8.11", "dependsOn": [] },
+    { "ref": "pkg:cargo/pin-project-lite@0.2.13", "dependsOn": [] },
+    {
+      "ref": "pkg:cargo/hyper@1.2.0",
+      "dependsOn": [ "pkg:cargo/http@1.1.0", "pkg:cargo/tokio@1.36.0", "pkg:cargo/bytes@1.5.0" ]
+    },
+    { "ref": "pkg:cargo/http@1.1.0", "dependsOn": [ "pkg:cargo/bytes@1.5.0" ] },
+    { "ref": "pkg:cargo/bytes@1.5.0", "dependsOn": [ "pkg:cargo/hyper@1.2.0" ] },
+    { "ref": "pkg:cargo/serde@1.0.197", "dependsOn": [ "pkg:cargo/serde_derive@1.0.197" ] },
+    {
+      "ref": "pkg:cargo/serde_derive@1.0.197",
+      "dependsOn": [ "pkg:cargo/syn@2.0.52", "pkg:cargo/proc-macro2@1.0.79" ]
+    },
+    { "ref": "pkg:cargo/syn@2.0.52", "dependsOn": [ "pkg:cargo/proc-macro2@1.0.79" ] },
+    { "ref": "pkg:cargo/proc-macro2@1.0.79", "dependsOn": [ "pkg:cargo/unicode-ident@1.0.12" ] },
+    { "ref": "pkg:cargo/unicode-ident@1.0.12", "dependsOn": [] },
+    { "ref": "pkg:cargo/rustls@0.22.2", "dependsOn": [ "pkg:cargo/ring@0.17.8" ] },
+    { "ref": "pkg:cargo/ring@0.17.8", "dependsOn": [] }
+  ]
+}

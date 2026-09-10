@@ -1,0 +1,180 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-08-07T18:45:30Z",
+    "tools": {
+      "components": [
+        { "type": "application", "name": "hand-crafted", "version": "1.0.0" }
+      ]
+    },
+    "component": {
+      "type": "application",
+      "bom-ref": "acme-mobile-backend",
+      "group": "@acme",
+      "name": "mobile-backend",
+      "version": "0.9.3",
+      "description": "Node API plus a Go push-notification sidecar, so this BOM mixes npm and golang purls",
+      "purl": "pkg:npm/%40acme/mobile-backend@0.9.3"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/fastify@4.26.2",
+      "name": "fastify",
+      "version": "4.26.2",
+      "purl": "pkg:npm/fastify@4.26.2",
+      "licenses": [ { "license": { "id": "MIT" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/find-my-way@8.1.0",
+      "name": "find-my-way",
+      "version": "8.1.0",
+      "purl": "pkg:npm/find-my-way@8.1.0",
+      "licenses": [ { "license": { "id": "MIT" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/fast-querystring@1.1.2",
+      "name": "fast-querystring",
+      "version": "1.1.2",
+      "purl": "pkg:npm/fast-querystring@1.1.2",
+      "licenses": [ { "license": { "id": "MIT" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/fast-decode-uri-component@1.0.1",
+      "name": "fast-decode-uri-component",
+      "version": "1.0.1",
+      "purl": "pkg:npm/fast-decode-uri-component@1.0.1",
+      "licenses": [ { "license": { "id": "MIT" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/pino@8.19.0",
+      "name": "pino",
+      "version": "8.19.0",
+      "purl": "pkg:npm/pino@8.19.0",
+      "licenses": [ { "license": { "id": "MIT" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/sonic-boom@3.8.0",
+      "name": "sonic-boom",
+      "version": "3.8.0",
+      "purl": "pkg:npm/sonic-boom@3.8.0",
+      "licenses": [ { "license": { "id": "MIT" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:NPM/lodash@4.17.21",
+      "name": "lodash",
+      "version": "4.17.21",
+      "purl": "pkg:NPM/lodash@4.17.21",
+      "licenses": [ { "license": { "id": "MIT" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/firebase-admin@12.0.0",
+      "name": "firebase-admin",
+      "version": "12.0.0",
+      "purl": "pkg:npm/firebase-admin@12.0.0",
+      "licenses": [ { "license": { "id": "Apache-2.0" } } ],
+      "components": [
+        {
+          "type": "library",
+          "bom-ref": "pkg:npm/%40google-cloud/firestore@7.3.0",
+          "group": "@google-cloud",
+          "name": "firestore",
+          "version": "7.3.0",
+          "purl": "pkg:npm/%40google-cloud/firestore@7.3.0",
+          "licenses": [ { "license": { "id": "Apache-2.0" } } ]
+        },
+        {
+          "type": "library",
+          "bom-ref": "pkg:npm/%40google-cloud/storage@7.7.0",
+          "group": "@google-cloud",
+          "name": "storage",
+          "version": "7.7.0",
+          "purl": "pkg:npm/%40google-cloud/storage@7.7.0",
+          "licenses": [ { "license": { "id": "Apache-2.0" } } ]
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:golang/github.com/sideshow/apns2@v0.23.0",
+      "name": "github.com/sideshow/apns2",
+      "version": "v0.23.0",
+      "purl": "pkg:golang/github.com/sideshow/apns2@v0.23.0",
+      "licenses": [ { "license": { "id": "MIT" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:golang/golang.org/x/crypto@v0.21.0",
+      "name": "golang.org/x/crypto",
+      "version": "v0.21.0",
+      "purl": "pkg:golang/golang.org/x/crypto@v0.21.0",
+      "licenses": [ { "license": { "id": "BSD-3-Clause" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/semver@7.6.0",
+      "name": "semver",
+      "version": "7.6.0",
+      "purl": "pkg:npm/semver@7.6.0",
+      "licenses": [ { "license": { "id": "ISC" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/lru-cache@6.0.0",
+      "name": "lru-cache",
+      "version": "6.0.0",
+      "purl": "pkg:npm/lru-cache@6.0.0",
+      "licenses": [ { "license": { "id": "ISC" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/yallist@4.0.0",
+      "name": "yallist",
+      "version": "4.0.0",
+      "purl": "pkg:npm/yallist@4.0.0",
+      "licenses": [ { "license": { "id": "ISC" } } ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "acme-mobile-backend",
+      "dependsOn": [
+        "pkg:npm/fastify@4.26.2",
+        "pkg:npm/pino@8.19.0",
+        "pkg:NPM/lodash@4.17.21",
+        "pkg:npm/firebase-admin@12.0.0",
+        "pkg:golang/github.com/sideshow/apns2@v0.23.0",
+        "pkg:npm/semver@7.6.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/fastify@4.26.2",
+      "dependsOn": [ "pkg:npm/find-my-way@8.1.0", "pkg:npm/pino@8.19.0" ]
+    },
+    { "ref": "pkg:npm/find-my-way@8.1.0", "dependsOn": [ "pkg:npm/fast-querystring@1.1.2" ] },
+    { "ref": "pkg:npm/fast-querystring@1.1.2", "dependsOn": [ "pkg:npm/fast-decode-uri-component@1.0.1" ] },
+    { "ref": "pkg:npm/fast-decode-uri-component@1.0.1", "dependsOn": [] },
+    { "ref": "pkg:npm/pino@8.19.0", "dependsOn": [ "pkg:npm/sonic-boom@3.8.0" ] },
+    { "ref": "pkg:npm/sonic-boom@3.8.0", "dependsOn": [] },
+    { "ref": "pkg:NPM/lodash@4.17.21", "dependsOn": [] },
+    { "ref": "pkg:npm/firebase-admin@12.0.0", "dependsOn": [] },
+    {
+      "ref": "pkg:golang/github.com/sideshow/apns2@v0.23.0",
+      "dependsOn": [ "pkg:golang/golang.org/x/crypto@v0.21.0" ]
+    },
+    { "ref": "pkg:golang/golang.org/x/crypto@v0.21.0", "dependsOn": [] },
+    { "ref": "pkg:npm/semver@7.6.0", "dependsOn": [ "pkg:npm/lru-cache@6.0.0" ] },
+    { "ref": "pkg:npm/lru-cache@6.0.0", "dependsOn": [ "pkg:npm/yallist@4.0.0" ] },
+    { "ref": "pkg:npm/yallist@4.0.0", "dependsOn": [] }
+  ]
+}

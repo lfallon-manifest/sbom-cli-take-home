@@ -1,0 +1,188 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "serialNumber": "urn:uuid:9b2e6f4a-1c3d-4e5f-8a7b-2c1d0e9f8a7b",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-08-11T23:59:59Z",
+    "tools": {
+      "components": [
+        { "type": "application", "name": "hand-crafted", "version": "1.0.0" }
+      ]
+    },
+    "component": {
+      "type": "application",
+      "bom-ref": "legacy-monolith",
+      "group": "com.acme.legacy",
+      "name": "legacy-monolith",
+      "version": "7.12.4",
+      "purl": "pkg:maven/com.acme.legacy/legacy-monolith@7.12.4?type=war"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "bom-ref": "org.apache.logging.log4j:log4j-core:2.17.1",
+      "group": "org.apache.logging.log4j",
+      "name": "log4j-core",
+      "version": "2.17.1",
+      "purl": "pkg:maven/org.apache.logging.log4j/log4j-core@2.17.1",
+      "licenses": [ { "license": { "id": "Apache-2.0" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "org.apache.logging.log4j:log4j-api:2.17.1",
+      "group": "org.apache.logging.log4j",
+      "name": "log4j-api",
+      "version": "2.17.1",
+      "purl": "pkg:maven/org.apache.logging.log4j/log4j-api@2.17.1",
+      "licenses": [ { "license": { "id": "Apache-2.0" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "org.hibernate:hibernate-core:5.6.15.Final",
+      "group": "org.hibernate",
+      "name": "hibernate-core",
+      "version": "5.6.15.Final",
+      "purl": "pkg:maven/org.hibernate/hibernate-core@5.6.15.Final",
+      "licenses": [ { "license": { "id": "LGPL-2.1-or-later" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "org.jboss.logging:jboss-logging:3.4.3.Final",
+      "group": "org.jboss.logging",
+      "name": "jboss-logging",
+      "version": "3.4.3.Final",
+      "purl": "pkg:maven/org.jboss.logging/jboss-logging@3.4.3.Final",
+      "licenses": [ { "license": { "id": "Apache-2.0" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "org.dom4j:dom4j:2.1.3",
+      "group": "org.dom4j",
+      "name": "dom4j",
+      "version": "2.1.3",
+      "purl": "pkg:maven/org.dom4j/dom4j@2.1.3",
+      "licenses": [
+        { "license": { "id": "BSD-3-Clause" } },
+        { "license": { "name": "Plexus" } }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "org.javassist:javassist:3.27.0-GA",
+      "group": "org.javassist",
+      "name": "javassist",
+      "version": "3.27.0-GA",
+      "purl": "pkg:maven/org.javassist/javassist@3.27.0-GA",
+      "licenses": [
+        { "license": { "id": "MPL-1.1" } },
+        { "license": { "id": "LGPL-2.1-or-later" } },
+        { "license": { "id": "Apache-2.0" } }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "commons-io:commons-io:2.11.0",
+      "group": "commons-io",
+      "name": "commons-io",
+      "version": "2.11.0",
+      "purl": "pkg:maven/commons-io/commons-io@2.11.0",
+      "licenses": [ { "license": { "id": "Apache-2.0" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "org.apache.struts:struts2-core:2.5.33",
+      "group": "org.apache.struts",
+      "name": "struts2-core",
+      "version": "2.5.33",
+      "purl": "pkg:maven/org.apache.struts/struts2-core@2.5.33",
+      "licenses": [ { "license": { "id": "Apache-2.0" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "ognl:ognl:3.1.29",
+      "group": "ognl",
+      "name": "ognl",
+      "version": "3.1.29",
+      "purl": "pkg:maven/ognl/ognl@3.1.29",
+      "licenses": [ { "license": { "id": "Apache-2.0" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "npm:lodash:4.17.15",
+      "name": "lodash",
+      "version": "4.17.15",
+      "purl": "pkg:npm/lodash@4.17.15",
+      "licenses": [ { "license": { "id": "MIT" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "npm:jquery:1.12.4",
+      "name": "jquery",
+      "version": "1.12.4",
+      "purl": "pkg:npm/jquery@1.12.4",
+      "licenses": [ { "license": { "id": "MIT" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "com.acme.legacy:jquery-legacy-patches:0.3.1",
+      "group": "com.acme.legacy",
+      "name": "jquery-legacy-patches",
+      "version": "0.3.1",
+      "description": "Vendored in-tree patches on top of jquery, never published, so no purl and no declared license"
+    },
+    {
+      "type": "application",
+      "bom-ref": "deb:coreutils:8.32-4.1",
+      "name": "coreutils",
+      "version": "8.32-4.1",
+      "purl": "pkg:deb/debian/coreutils@8.32-4.1?arch=amd64&distro=debian-11",
+      "licenses": [ { "license": { "id": "GPL-3.0-only" } } ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "legacy-monolith",
+      "dependsOn": [
+        "org.apache.struts:struts2-core:2.5.33",
+        "org.hibernate:hibernate-core:5.6.15.Final",
+        "org.apache.logging.log4j:log4j-core:2.17.1",
+        "commons-io:commons-io:2.11.0",
+        "npm:lodash:4.17.15",
+        "com.acme.legacy:jquery-legacy-patches:0.3.1",
+        "deb:coreutils:8.32-4.1"
+      ]
+    },
+    {
+      "ref": "org.apache.struts:struts2-core:2.5.33",
+      "dependsOn": [
+        "commons-io:commons-io:2.11.0",
+        "org.apache.logging.log4j:log4j-api:2.17.1",
+        "ognl:ognl:3.1.29"
+      ]
+    },
+    { "ref": "ognl:ognl:3.1.29", "dependsOn": [ "org.javassist:javassist:3.27.0-GA" ] },
+    { "ref": "org.javassist:javassist:3.27.0-GA", "dependsOn": [] },
+    {
+      "ref": "org.hibernate:hibernate-core:5.6.15.Final",
+      "dependsOn": [
+        "org.jboss.logging:jboss-logging:3.4.3.Final",
+        "org.dom4j:dom4j:2.1.3",
+        "org.javassist:javassist:3.27.0-GA"
+      ]
+    },
+    { "ref": "org.jboss.logging:jboss-logging:3.4.3.Final", "dependsOn": [] },
+    { "ref": "org.dom4j:dom4j:2.1.3", "dependsOn": [] },
+    {
+      "ref": "org.apache.logging.log4j:log4j-core:2.17.1",
+      "dependsOn": [ "org.apache.logging.log4j:log4j-api:2.17.1" ]
+    },
+    { "ref": "org.apache.logging.log4j:log4j-api:2.17.1", "dependsOn": [] },
+    { "ref": "commons-io:commons-io:2.11.0", "dependsOn": [] },
+    { "ref": "npm:lodash:4.17.15", "dependsOn": [] },
+    { "ref": "com.acme.legacy:jquery-legacy-patches:0.3.1", "dependsOn": [ "npm:jquery:1.12.4" ] },
+    { "ref": "npm:jquery:1.12.4", "dependsOn": [] },
+    { "ref": "deb:coreutils:8.32-4.1", "dependsOn": [] }
+  ]
+}

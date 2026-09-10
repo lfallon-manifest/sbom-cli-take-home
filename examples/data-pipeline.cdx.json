@@ -1,0 +1,152 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "serialNumber": "urn:uuid:f47ac10b-58cc-4372-a567-0e02b2c3d479",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-08-09T06:00:00Z",
+    "tools": {
+      "components": [
+        { "type": "application", "name": "hand-crafted", "version": "1.0.0" }
+      ]
+    },
+    "component": {
+      "type": "application",
+      "bom-ref": "acme-data-pipeline@0.4.2",
+      "name": "acme-data-pipeline",
+      "version": "0.4.2",
+      "purl": "pkg:pypi/acme-data-pipeline@0.4.2"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "bom-ref": "requests@2.31.0",
+      "name": "requests",
+      "version": "2.31.0",
+      "purl": "pkg:pypi/requests@2.31.0",
+      "licenses": [ { "license": { "id": "Apache-2.0" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "urllib3@2.2.1",
+      "name": "urllib3",
+      "version": "2.2.1",
+      "purl": "pkg:pypi/urllib3@2.2.1",
+      "licenses": [ { "license": { "id": "MIT" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "certifi@2024.2.2",
+      "name": "certifi",
+      "version": "2024.2.2",
+      "purl": "pkg:pypi/certifi@2024.2.2",
+      "licenses": [ { "license": { "id": "MPL-2.0" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "charset-normalizer@3.3.2",
+      "name": "charset-normalizer",
+      "version": "3.3.2",
+      "purl": "pkg:pypi/charset-normalizer@3.3.2",
+      "licenses": [ { "license": { "id": "MIT" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "idna@3.6",
+      "name": "idna",
+      "version": "3.6",
+      "purl": "pkg:pypi/idna@3.6",
+      "licenses": [ { "license": { "id": "BSD-3-Clause" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pandas@2.2.1",
+      "name": "pandas",
+      "version": "2.2.1",
+      "purl": "pkg:pypi/pandas@2.2.1",
+      "licenses": [ { "license": { "id": "BSD-3-Clause" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "numpy@1.26.4",
+      "name": "numpy",
+      "version": "1.26.4",
+      "purl": "pkg:pypi/numpy@1.26.4",
+      "licenses": [ { "license": { "id": "BSD-3-Clause" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "python-dateutil@2.9.0",
+      "name": "python-dateutil",
+      "version": "2.9.0",
+      "purl": "pkg:pypi/python-dateutil@2.9.0",
+      "licenses": [
+        { "license": { "id": "Apache-2.0" } },
+        { "license": { "id": "BSD-3-Clause" } }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "six@1.16.0",
+      "name": "six",
+      "version": "1.16.0",
+      "purl": "pkg:pypi/six@1.16.0",
+      "licenses": [ { "license": { "id": "MIT" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "cryptography@42.0.5",
+      "name": "cryptography",
+      "version": "42.0.5",
+      "purl": "pkg:pypi/cryptography@42.0.5",
+      "licenses": [ { "expression": "Apache-2.0 OR BSD-3-Clause" } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "cffi@1.16.0",
+      "name": "cffi",
+      "version": "1.16.0",
+      "purl": "pkg:pypi/cffi@1.16.0",
+      "licenses": [ { "license": { "id": "MIT" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pycparser@2.21",
+      "name": "pycparser",
+      "version": "2.21",
+      "purl": "pkg:pypi/pycparser@2.21",
+      "licenses": [ { "license": { "id": "BSD-3-Clause" } } ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "boto3@1.34.69",
+      "name": "boto3",
+      "version": "1.34.69",
+      "purl": "pkg:pypi/boto3@1.34.69"
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "acme-data-pipeline@0.4.2",
+      "dependsOn": [ "requests@2.31.0", "pandas@2.2.1", "cryptography@42.0.5", "boto3@1.34.69" ]
+    },
+    {
+      "ref": "requests@2.31.0",
+      "dependsOn": [ "urllib3@2.2.1", "certifi@2024.2.2", "charset-normalizer@3.3.2", "idna@3.6" ]
+    },
+    { "ref": "urllib3@2.2.1", "dependsOn": [] },
+    { "ref": "certifi@2024.2.2", "dependsOn": [] },
+    { "ref": "charset-normalizer@3.3.2", "dependsOn": [] },
+    { "ref": "idna@3.6", "dependsOn": [] },
+    { "ref": "pandas@2.2.1", "dependsOn": [ "numpy@1.26.4", "python-dateutil@2.9.0" ] },
+    { "ref": "numpy@1.26.4", "dependsOn": [] },
+    { "ref": "python-dateutil@2.9.0", "dependsOn": [ "six@1.16.0" ] },
+    { "ref": "six@1.16.0", "dependsOn": [] },
+    { "ref": "cryptography@42.0.5", "dependsOn": [ "cffi@1.16.0" ] },
+    { "ref": "cffi@1.16.0", "dependsOn": [ "pycparser@2.21" ] },
+    { "ref": "pycparser@2.21", "dependsOn": [] },
+    { "ref": "boto3@1.34.69", "dependsOn": [ "botocore@1.34.69" ] },
+    { "ref": "s3transfer@0.10.1", "dependsOn": [] }
+  ]
+}
