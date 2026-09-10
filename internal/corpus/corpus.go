@@ -36,8 +36,9 @@ type Config struct {
 	NoSerialRate     float64
 	CycleRate        float64
 	DanglingRate     float64
-	// Progress, if set, is called as documents complete.
-	Progress func(documents, total int)
+	// Progress, if set, is called as documents complete. It shapes reporting, not
+	// the corpus, so it stays out of a serialized Config.
+	Progress func(documents, total int) `json:"-"`
 }
 
 // PackageCount is one package-version and the number of documents it appears in.
@@ -71,11 +72,14 @@ func (c Config) validate() error {
 	return nil
 }
 
+// universeSize derives a pool big enough that no single document holds a
+// noticeable share of it, while still small enough that package-versions recur
+// heavily across the corpus.
 func (c Config) universeSize() int {
 	if c.UniverseSize > 0 {
 		return c.UniverseSize
 	}
-	return max(64, c.Documents*c.ComponentsPerDoc/defaultUniverseDivisor)
+	return max(64, 10*c.ComponentsPerDoc, c.Documents*c.ComponentsPerDoc/defaultUniverseDivisor)
 }
 
 func (c Config) workers() int {

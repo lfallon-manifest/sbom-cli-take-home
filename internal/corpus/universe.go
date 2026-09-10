@@ -156,6 +156,12 @@ func buildUniverse(size int, seed int64) (*universe, error) {
 	if len(u.packages) == 0 {
 		return nil, fmt.Errorf("universe size %d produced no packages", size)
 	}
+	// Names are built by walking the word lists in order, and documents draw
+	// hot packages from the low indices, so without a shuffle every popular
+	// package would share the same noun.
+	r.Shuffle(len(u.packages), func(i, j int) {
+		u.packages[i], u.packages[j] = u.packages[j], u.packages[i]
+	})
 	return u, nil
 }
 
