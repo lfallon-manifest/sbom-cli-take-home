@@ -164,17 +164,24 @@ func reportSummary(w io.Writer, cfg corpus.Config, s corpus.Summary, elapsed tim
 		fmt.Fprintf(w, "  reuse factor:      %.1f component occurrences per package-version\n",
 			float64(s.Components)/float64(s.DistinctPackages))
 	}
-	if len(s.TopPackages) > 0 {
-		fmt.Fprintln(w, "\nmost widely used package-versions:")
-		for _, p := range s.TopPackages {
-			fmt.Fprintf(w, "  %-52s %d documents\n", p.Package, p.Document)
-		}
-		hot := s.TopPackages[0]
-		fmt.Fprintf(w, "\nnext steps:\n")
-		fmt.Fprintf(w, "  ./sbom-cli --db ./large.duckdb ingest %s\n", filepath.Join(cfg.OutDir, "*.cdx.json"))
-		fmt.Fprintf(w, "  ./sbom-cli --db ./large.duckdb query --component %s\n", packageName(hot.Package))
-		fmt.Fprintf(w, "  ./sbom-cli --db ./large.duckdb query --license GPL-3.0-only\n")
+	if len(s.TopPackages) == 0 {
+		return
 	}
+	fmt.Fprintln(w, "\nmost widely used package-versions:")
+	for _, p := range s.TopPackages {
+		fmt.Fprintf(w, "  %-52s %s\n", p.Package, plural(p.Document, "document"))
+	}
+	fmt.Fprintf(w, "\nnext steps:\n")
+	fmt.Fprintf(w, "  ./sbom-cli --db ./large.duckdb ingest %s\n", filepath.Join(cfg.OutDir, "*.cdx.json"))
+	fmt.Fprintf(w, "  ./sbom-cli --db ./large.duckdb query --component %s   # in %s\n",
+		packageName(s.TopPackages[0].Package), plural(s.TopPackages[0].Document, "document"))
+	if len(s.RarePackages) > 0 {
+		fmt.Fprintf(w, "  ./sbom-cli --db ./large.duckdb query --component %s   # in %s\n",
+			packageName(s.RarePackages[0].Package), plural(s.RarePackages[0].Document, "document"))
+	}
+	fmt.Fprintf(w, "  ./sbom-cli --db ./large.duckdb query --license GPL-3.0-only\n")
+	fmt.Fprintf(w, "\n%s records the full configuration and both ends of the reuse distribution.\n",
+		filepath.Join(cfg.OutDir, manifestName))
 }
 
 // packageName trims the trailing @version from a "name@version" label.

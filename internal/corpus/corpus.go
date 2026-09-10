@@ -49,15 +49,19 @@ type PackageCount struct {
 
 // Summary reports what one Generate call produced.
 type Summary struct {
-	Files            int            `json:"files"`
-	Documents        int            `json:"documents"`
-	Revisions        int            `json:"revisions"`
-	Components       int            `json:"components"`
-	Dependencies     int            `json:"dependencies"`
-	UniverseSize     int            `json:"universeSize"`
-	DistinctPackages int            `json:"distinctPackages"`
-	Bytes            int64          `json:"bytes"`
-	TopPackages      []PackageCount `json:"topPackages"`
+	Files            int   `json:"files"`
+	Documents        int   `json:"documents"`
+	Revisions        int   `json:"revisions"`
+	Components       int   `json:"components"`
+	Dependencies     int   `json:"dependencies"`
+	UniverseSize     int   `json:"universeSize"`
+	DistinctPackages int   `json:"distinctPackages"`
+	Bytes            int64 `json:"bytes"`
+	// TopPackages and RarePackages are the two ends of the reuse distribution,
+	// which is what a query benchmark needs: a package in nearly every document
+	// and one in almost none.
+	TopPackages  []PackageCount `json:"topPackages"`
+	RarePackages []PackageCount `json:"rarePackages"`
 }
 
 func (c Config) validate() error {
@@ -244,11 +248,12 @@ func aggregate(cfg Config, u *universe, results <-chan docResult, done chan stru
 	if firstErr != nil {
 		return Summary{}, firstErr
 	}
-	drawn, top := packageStats(u, counts)
+	drawn, order := packageStats(u, counts)
 	// Each application contributes its own primary package-version on top of the
 	// universe entries it draws; a revision reuses its application's primary.
 	summary.DistinctPackages = drawn + summary.Documents
-	summary.TopPackages = top
+	summary.TopPackages = packageCounts(u, counts, order, false)
+	summary.RarePackages = packageCounts(u, counts, order, true)
 	return summary, nil
 }
 
@@ -256,8 +261,10 @@ func aggregate(cfg Config, u *universe, results <-chan docResult, done chan stru
 // summary reports, so a scaling run has known hot packages to query.
 const topPackageCount = 10
 
-func packageStats(u *universe, counts []int32) (distinct int, top []PackageCount) {
-	order := make([]int, 0, len(counts))
+// packageStats returns how many universe entries were drawn at all, and those
+// entries ordered from most to least used.
+func packageStats(u *universe, counts []int32) (distinct int, order []int) {
+	order = make([]int, 0, len(counts))
 	for i, c := range counts {
 		if c > 0 {
 			distinct++
@@ -270,8 +277,24 @@ func packageStats(u *universe, counts []int32) (distinct int, top []PackageCount
 		}
 		return u.packages[order[a]].label() < u.packages[order[b]].label()
 	})
-	for _, i := range order[:min(topPackageCount, len(order))] {
-		top = append(top, PackageCount{Package: u.packages[i].label(), Document: int(counts[i])})
+	return distinct, order
+}
+
+// packageCounts renders one end of the ordered distribution: the head, or the
+// tail reversed so it reads from rarest upwards.
+func packageCounts(u *universe, counts []int32, order []int, tail bool) []PackageCount {
+	n := min(topPackageCount, len(order))
+	picked := order[:n]
+	if tail {
+		picked = order[len(order)-n:]
 	}
-	return distinct, top
+	out := make([]PackageCount, 0, n)
+	for i := range picked {
+		idx := picked[i]
+		if tail {
+			idx = picked[len(picked)-1-i]
+		}
+		out = append(out, PackageCount{Package: u.packages[idx].label(), Document: int(counts[idx])})
+	}
+	return out
 }

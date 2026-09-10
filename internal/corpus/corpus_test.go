@@ -125,6 +125,30 @@ func TestPackagesConvergeAcrossDocuments(t *testing.T) {
 	}
 }
 
+// A scaling run needs a cold package to compare the hot one against, so the
+// summary reports the thin end of the distribution too.
+func TestSummaryReportsRarePackages(t *testing.T) {
+	summary, _ := generate(t, Config{Documents: 40, ComponentsPerDoc: 50, UniverseSize: 4000, Seed: 3})
+
+	if len(summary.RarePackages) != topPackageCount {
+		t.Fatalf("RarePackages has %d entries, want %d", len(summary.RarePackages), topPackageCount)
+	}
+	for i, p := range summary.RarePackages {
+		if p.Document < 1 {
+			t.Errorf("RarePackages[%d] appears in %d documents; undrawn packages do not belong here", i, p.Document)
+		}
+	}
+	if rarest, hottest := summary.RarePackages[0], summary.TopPackages[0]; rarest.Document >= hottest.Document {
+		t.Errorf("rarest package (%d documents) is not rarer than the hottest (%d documents)",
+			rarest.Document, hottest.Document)
+	}
+	for i := 1; i < len(summary.RarePackages); i++ {
+		if summary.RarePackages[i-1].Document > summary.RarePackages[i].Document {
+			t.Errorf("RarePackages not sorted ascending at %d: %+v", i, summary.RarePackages)
+		}
+	}
+}
+
 func TestGeneratedDocumentsIngestCleanly(t *testing.T) {
 	const componentsPerDoc = 25
 	_, files := generate(t, Config{Documents: 4, ComponentsPerDoc: componentsPerDoc, Seed: 7})
