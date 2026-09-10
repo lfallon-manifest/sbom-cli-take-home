@@ -1,0 +1,84 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "serialNumber": "urn:uuid:3e671687-395b-41f5-a30f-a58921a69b79",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-09-10T12:00:00Z",
+    "component": {
+      "bom-ref": "app",
+      "type": "application",
+      "name": "app",
+      "version": "1.0.0"
+    }
+  },
+  "components": [
+    {
+      "bom-ref": "pkg:npm/express@4.18.2",
+      "type": "library",
+      "name": "express",
+      "version": "4.18.2",
+      "purl": "pkg:npm/express@4.18.2",
+      "licenses": [
+        { "license": { "id": "MIT" } }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/body-parser@1.20.2",
+      "type": "library",
+      "name": "body-parser",
+      "version": "1.20.2",
+      "purl": "pkg:npm/body-parser@1.20.2",
+      "licenses": [
+        { "expression": "MIT OR Apache-2.0" }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/qs@6.11.0",
+      "type": "library",
+      "name": "qs",
+      "version": "6.11.0",
+      "purl": "pkg:NPM/qs@6.11.0?foo=bar#sub",
+      "licenses": [
+        { "license": { "id": "BSD-3-Clause" } }
+      ]
+    },
+    {
+      "bom-ref": "internal-lib",
+      "type": "library",
+      "name": "internal-lib",
+      "version": "0.1.0",
+      "licenses": [
+        { "license": { "name": "Custom License" } }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "no-ref-lib",
+      "version": "2.0.0",
+      "purl": "pkg:npm/no-ref-lib@2.0.0"
+    },
+    {
+      "bom-ref": "pkg:npm/outer@1.0.0",
+      "type": "library",
+      "name": "outer",
+      "version": "1.0.0",
+      "purl": "pkg:npm/outer@1.0.0",
+      "components": [
+        {
+          "bom-ref": "pkg:npm/inner@1.0.0",
+          "type": "library",
+          "name": "inner",
+          "version": "1.0.0",
+          "purl": "pkg:npm/inner@1.0.0"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    { "ref": "app", "dependsOn": ["pkg:npm/express@4.18.2"] },
+    { "ref": "pkg:npm/express@4.18.2", "dependsOn": ["pkg:npm/body-parser@1.20.2"] },
+    { "ref": "pkg:npm/body-parser@1.20.2", "dependsOn": ["pkg:npm/qs@6.11.0", "does-not-exist"] },
+    { "ref": "pkg:npm/qs@6.11.0", "dependsOn": [] }
+  ]
+}
