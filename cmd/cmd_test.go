@@ -312,23 +312,64 @@ func TestIngestJSON(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	var got store.IngestResult
+	var got []store.IngestResult
 	if err := json.Unmarshal([]byte(out), &got); err != nil {
-		t.Fatalf("output is not JSON: %v\n%s", err, out)
+		t.Fatalf("output is not a JSON array: %v\n%s", err, out)
 	}
-	if got != res {
-		t.Fatalf("round trip mismatch: got %+v want %+v", got, res)
+	if len(got) != 1 || got[0] != res {
+		t.Fatalf("round trip mismatch: got %+v want [%+v]", got, res)
 	}
 }
 
-func TestIngestRequiresExactlyOneArg(t *testing.T) {
+func TestIngestRequiresAtLeastOneArg(t *testing.T) {
 	fake := &fakeStore{}
 	_, _, err := execute(t, fake, "ingest")
-	assertUsageError(t, err, "accepts 1 arg(s)")
-	_, _, err = execute(t, fake, "ingest", "a.json", "b.json")
-	assertUsageError(t, err, "accepts 1 arg(s)")
+	assertUsageError(t, err, "requires at least 1 arg(s)")
 	if fake.opens != 0 {
 		t.Fatalf("store opened %d time(s) despite usage error", fake.opens)
+	}
+}
+
+func TestIngestMultipleFilesOpensStoreOnce(t *testing.T) {
+	fake := &fakeStore{ingestResult: store.IngestResult{Version: 1, DocumentName: "doc", Components: 2}}
+	out, _, err := execute(t, fake, "ingest", "a.json", "b.json", "c.json")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if !slices.Equal(fake.ingestPaths, []string{"a.json", "b.json", "c.json"}) {
+		t.Fatalf("store got paths %q", fake.ingestPaths)
+	}
+	if fake.opens != 1 {
+		t.Fatalf("store opened %d time(s), want 1", fake.opens)
+	}
+	if got := strings.Count(out, "Ingested doc (serial (none), version 1)\n"); got != 3 {
+		t.Fatalf("want 3 summary blocks, got %d:\n%s", got, out)
+	}
+}
+
+func TestIngestStopsAtFirstFailure(t *testing.T) {
+	fake := &fakeStore{err: errors.New("parse b.json: boom")}
+	_, _, err := execute(t, fake, "ingest", "a.json", "b.json", "c.json")
+	if err == nil || !strings.Contains(err.Error(), "boom") {
+		t.Fatalf("want the store error, got %v", err)
+	}
+	if !slices.Equal(fake.ingestPaths, []string{"a.json"}) {
+		t.Fatalf("store got paths %q, want to stop after the first failure", fake.ingestPaths)
+	}
+}
+
+func TestIngestMultipleFilesJSONIsOneArray(t *testing.T) {
+	res := store.IngestResult{Version: 1, DocumentName: "doc"}
+	out, _, err := execute(t, &fakeStore{ingestResult: res}, "--json", "ingest", "a.json", "b.json")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	var got []store.IngestResult
+	if err := json.Unmarshal([]byte(out), &got); err != nil {
+		t.Fatalf("output is not a JSON array: %v\n%s", err, out)
+	}
+	if len(got) != 2 || got[0] != res || got[1] != res {
+		t.Fatalf("got %+v, want two copies of %+v", got, res)
 	}
 }
 

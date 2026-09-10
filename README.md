@@ -20,10 +20,12 @@ The first build is slow because of the static DuckDB library; later builds hit t
 ## Usage
 
 ```
-sbom-cli ingest <sbom-file>
+sbom-cli ingest <sbom-file>...
 sbom-cli query --component <name> [--version <version>]
 sbom-cli query --license <license>
 ```
+
+`ingest` takes one or more files and processes them in order, each in its own transaction. The first failure stops the run; because re-ingest is a no-op, rerunning the same command after fixing the bad file picks up where it left off.
 
 Global flags:
 
@@ -49,7 +51,7 @@ Output below is from a real run against the ten SBOMs in `examples/`.
 
 ```sh
 $ go build -o sbom-cli .
-$ for f in examples/*.cdx.json; do ./sbom-cli ingest "$f"; done
+$ ./sbom-cli ingest examples/*.cdx.json
 Ingested github.com/acme/api-service (serial urn:uuid:7c5b4a9e-2f1d-4e8a-9b3c-6d2e1f0a8b7c, version 1)
   components: 13   new packages: 13   dependency edges: 13   dangling refs: 0
 ...
@@ -98,7 +100,7 @@ $ ./sbom-cli --json query --component lodash --version 4.17.15
 
 The lodash rows show three things at once: the same package-version reached from four documents under three purl spellings (plain, uppercase type, and with qualifiers and a subpath) resolves to one canonical `PACKAGE`; a document with no serial number shows `-`; and both revisions of web-frontend (versions 1 and 2, same serial) are separate documents. DEPENDENTS lists the components that transitively depend on the match, nearest first. The `cryptography` row shows a component declared `Apache-2.0 OR BSD-3-Clause` matching `--license Apache-2.0` because expressions are tokenized at ingest.
 
-`--json` emits the hits as an array using the field names in `internal/store/types.go`; an empty result is `[]`.
+`--json` emits the hits as an array using the field names in `internal/store/types.go`; an empty result is `[]`. With `ingest`, `--json` emits one array of per-file summaries.
 
 ## More
 

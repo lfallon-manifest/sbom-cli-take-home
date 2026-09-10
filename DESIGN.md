@@ -9,12 +9,14 @@ sbom-cli is a Go CLI that ingests CycloneDX 1.6 JSON SBOMs into a single-file Du
 ## CLI design
 
 ```
-sbom-cli ingest <sbom-file>
+sbom-cli ingest <sbom-file>...
 sbom-cli query --component <name> [--version <version>]
 sbom-cli query --license <license>
 ```
 
 Global flags: `--db <path>` (default `./sbom.duckdb`) selects the database file, and `--json` switches output from a human-readable table to JSON.
+
+`ingest` accepts several files so a shell glob works directly. The store is opened once and each file is ingested in order in its own transaction. The first failure stops the run rather than continuing and summarizing: the error names the file, and since re-ingest is a no-op the fix is to rerun the same command. With `--json` the output is one array of per-file results, so the shape does not depend on how many files were given.
 
 Matching rules were written down up front so the ingest and query work could proceed in parallel without guessing differently:
 
@@ -235,7 +237,7 @@ Deferred, not built:
 - `--purl` query flag.
 - `--all-versions` on queries.
 - Combining `--component` and `--license` in one query.
-- Ingesting a directory or multiple paths in one invocation.
+- Ingesting a directory (multiple file arguments are supported; directory walking is not).
 - Subject-keyed drift timeline, grouping snapshots by primary component name and version.
 
 ## How AI tools were used
