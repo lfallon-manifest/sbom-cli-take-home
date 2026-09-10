@@ -1,0 +1,4 @@
+sbom-cli
+*.duckdb
+*.duckdb.wal
+.claude/
