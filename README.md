@@ -17,6 +17,17 @@ go build -o sbom-cli .
 
 The first build is slow because of the static DuckDB library; later builds hit the cache. The `sbom-cli` binary and `*.duckdb` files are gitignored.
 
+### Portability and cross-compilation
+
+The output is one self-contained binary. DuckDB is linked statically, and the only dynamic dependencies are the operating system's own C and C++ runtimes, so the binary can be copied to another machine of the same OS and architecture and run as is.
+
+Building is less portable than running:
+
+- `CGO_ENABLED=0` does not build. The driver has no pure-Go fallback.
+- Cross-compiling needs a C cross toolchain for the target, not just `GOOS` and `GOARCH`. A plain `GOOS=linux go build` from macOS fails inside the Go runtime's cgo layer. The practical options are a native build per platform (a CI runner matrix) or a cross compiler such as `zig cc` or mingw-w64 supplied through `CC`.
+- Supported targets are the ones the bindings ship static libraries for: darwin amd64 and arm64, linux amd64 and arm64, windows amd64.
+- Windows needs a GCC-compatible toolchain. The Windows bindings are MinGW-style static archives linked with `--static` against libstdc++, Winsock, and the Restart Manager library, so the build requires MinGW-w64 (MSYS2 on Windows, or `CC=x86_64-w64-mingw32-gcc` for a cross build from Linux or macOS). MSVC cannot be used. There is no windows-arm64 bindings module, so Windows on ARM is unsupported by the driver today. The resulting `.exe` is statically linked and self-contained. This path was not exercised during the exercise; no Windows machine or MinGW toolchain was available.
+
 ## Usage
 
 ```

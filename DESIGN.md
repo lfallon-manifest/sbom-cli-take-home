@@ -42,12 +42,13 @@ Why:
 
 Tradeoffs:
 
-- CGO. The driver links a prebuilt static DuckDB library, so a C toolchain is required and the first build is slow. The README calls this out.
+- CGO. The driver links a prebuilt static DuckDB library, so a C toolchain is required and the first build is slow. The README calls this out. The binary that comes out is self-contained (DuckDB is static, only the OS C and C++ runtimes are dynamic), so distribution is one file per platform.
+- Cross-compilation is not free. `GOOS`/`GOARCH` alone do not work; each target needs its own C toolchain or a native build. Targets are limited to what the bindings ship static libraries for (darwin and linux on amd64 and arm64, windows on amd64 only). Windows is the sharpest edge because it is an eventual requirement: the bindings are GCC-style archives linked fully static, so the build needs MinGW-w64 and cannot use MSVC, and there is no windows-arm64 module at all. The cost is a CI runner matrix (or a zig or mingw cross toolchain) rather than a single `go build` loop over targets.
 - Single writer. One process holds the file for writing; concurrent ingest from many producers is not a DuckDB use case.
 - Limited foreign key support. No cascading deletes and restricted updates, which shaped the schema (see the root component discussion below).
 - Not a server. There is no network access, no auth, no multi-user story. That is fine for a CLI and is the first thing to change at scale.
 
-The fallback, had the CGO build failed, was SQLite via `modernc.org/sqlite` (pure Go, no CGO). The schema is portable, and both the recursive CTE and the derived document key work unchanged in SQLite. The build succeeded, so the fallback was never exercised.
+The fallback, had the CGO build failed, was SQLite via `modernc.org/sqlite` (pure Go, no CGO). The schema is portable, and both the recursive CTE and the derived document key work unchanged in SQLite. The build succeeded, so the fallback was never exercised. It remains the exit if Windows support arrives and the MinGW toolchain cost proves unacceptable: a pure-Go store cross-compiles to every Go target with no C compiler at all, and the swap is contained to `internal/store` because the CLI codes against the `Store` interface.
 
 ## Data model
 
@@ -231,6 +232,7 @@ Modeling and behavior:
 - `packages.purl` holds whichever raw purl first introduced the package-version, qualifiers included. `package_key` is the identity; `purl` is informational.
 - `--license` also matches name-only licenses (`--license "Custom Proprietary License"`), which goes slightly beyond the stated SPDX-id rule. It fell out of the `license_key` design for free and was kept.
 - `--json` is a global flag, so `sbom-cli --json query ...` and `sbom-cli query ... --json` both work. Persistent flags in Cobra allow either position.
+- Only the macOS arm64 build was exercised. Linux and Windows builds are supported by the bindings but were not produced here, and the Windows path in particular (MinGW-w64, no MSVC, amd64 only) is documented from the bindings' link flags rather than from a successful build. Windows support is an eventual requirement, so the first CI change is a runner matrix that proves all three operating systems build and pass the suite.
 
 Deferred, not built:
 
