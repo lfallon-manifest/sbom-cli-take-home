@@ -58,6 +58,10 @@ Re-ingesting a byte-identical file is a no-op and is reported as already present
 
 ## Example session
 
+![Ingesting the ten example SBOMs, then querying by component, by pinned version, and by license](demo.gif)
+
+The recording is driven by `demo.tape` and made with [VHS](https://github.com/charmbracelet/vhs); `vhs demo.tape` from the repo root regenerates it. Note that the tape deletes `./sbom.duckdb` before recording so the ingest starts empty.
+
 Output below is from a real run against the ten SBOMs in `examples/`.
 
 ```sh
