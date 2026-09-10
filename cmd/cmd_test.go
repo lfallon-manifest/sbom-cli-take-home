@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"reflect"
+	"slices"
 	"strings"
 	"testing"
 
@@ -21,7 +22,7 @@ type fakeStore struct {
 
 	openedPath       string
 	opens            int
-	ingestPath       string
+	ingestPaths      []string
 	componentName    string
 	componentVersion string
 	license          string
@@ -29,7 +30,7 @@ type fakeStore struct {
 }
 
 func (f *fakeStore) Ingest(_ context.Context, path string) (store.IngestResult, error) {
-	f.ingestPath = path
+	f.ingestPaths = append(f.ingestPaths, path)
 	return f.ingestResult, f.err
 }
 
@@ -276,8 +277,8 @@ func TestIngestPrintsSummary(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if fake.ingestPath != "examples/web-frontend.cdx.json" {
-		t.Fatalf("store got path %q", fake.ingestPath)
+	if !slices.Equal(fake.ingestPaths, []string{"examples/web-frontend.cdx.json"}) {
+		t.Fatalf("store got paths %q", fake.ingestPaths)
 	}
 	if !fake.closed {
 		t.Fatalf("store was not closed")
