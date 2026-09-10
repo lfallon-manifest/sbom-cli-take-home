@@ -2,3 +2,7 @@ sbom-cli
 *.duckdb
 *.duckdb.wal
 .claude/
+
+# Generated scale-test corpora. Hundreds of megabytes; regenerate with
+# go run ./scripts/gencorpus
+examples-large/
